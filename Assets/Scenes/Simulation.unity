@@ -474,7 +474,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberOfPeople: 3
-  personPrefab: {fileID: 4283646885544702062, guid: 4272ec8e1467d1648b66f5a01d60b686, type: 3}
+  personPrefab: {fileID: 6588637096855284555, guid: b62e537a90f282e41b63c5d045c9d608, type: 3}
   classRooms: {fileID: 1341337054}
 --- !u!1 &958484393
 GameObject:
@@ -1021,7 +1021,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1755608080}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: c2d300f7dca883c409ea182c6c350e6e, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
