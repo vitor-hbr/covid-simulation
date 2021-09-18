@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Population_Controller : MonoBehaviour
 {
@@ -12,6 +13,22 @@ public class Population_Controller : MonoBehaviour
 
     public int numberOfPeople;
     public DayNightCycle dayNightCycle;
+
+    private UnityEvent checkActivationPeriod;
+    private float lastTime;
+
+    public enum periods
+    {
+        morning,
+        afternoon,
+        night
+    }
+
+    private periods[] Periods = {
+        periods.morning,
+        periods.afternoon,
+        periods.night
+    };
 
     private void Start()
     {
@@ -31,25 +48,21 @@ public class Population_Controller : MonoBehaviour
         }
 
         createPopulation(chairs, chairIndexesList);
+
+        lastTime = dayNightCycle.time;
+        checkActivationPeriod = new UnityEvent();
+        checkActivationPeriod.AddListener(activatePersons);
     }
     
     private void Update()
     {
-        foreach(periods boundry in Periods)
-        {
-            float[] b = dayNightCycle.getPeriodBoundry(boundry);
-            if(dayNightCycle.time >= b[0] && dayNightCycle.time <= b[1])
-            {
-                foreach(Transform person in transform)
-                {
-                    AgentNavigation navAgent = person.gameObject.GetComponent<AgentNavigation>();
-                    if(!person.gameObject.activeSelf && navAgent.periodBoundry[0] == dayNightCycle.time)
-                    {
-                        person.gameObject.SetActive(true);
-                    }
-                }
+        foreach (periods p in Periods) {
+            float[] boundry = getPeriodBoundry(p);
+            if (lastTime <= boundry[0] && dayNightCycle.time >= boundry[0]) {
+                checkActivationPeriod.Invoke();
             }
         }
+        lastTime = dayNightCycle.time;
     }
 
     void createPopulation(Transform[] chairs, List<int> chairIndexesList)
@@ -73,7 +86,7 @@ public class Population_Controller : MonoBehaviour
             AgentNavigation personNav = person.GetComponent<AgentNavigation>();
             personNav.chair = chairs[currentClassRoom].GetChild(chairIndexesListCopy[randomIndex]).gameObject;
             chairIndexesListCopy.RemoveAt(randomIndex);
-            personNav.periodBoundry = dayNightCycle.getPeriodBoundry(currentPeriod);
+            personNav.periodBoundry = getPeriodBoundry(currentPeriod);
             personNav.dayNight = dayNightCycle;
             personNav.exit = exit; 
             personNav.start = start;
@@ -83,6 +96,39 @@ public class Population_Controller : MonoBehaviour
             {
                 currentClassRoom++;
                 chairIndexesListCopy = new List<int>(chairIndexesList);
+            }
+        }
+    }
+
+    public float[] getPeriodBoundry(periods period)
+    {
+        float[] boundries = new float[2];
+        switch (period)
+        {
+            case periods.morning:
+                boundries[0] = (8f / 24f);
+                boundries[1] = (12f / 24f);
+                break;
+            case periods.afternoon:
+                boundries[0] = (12f / 24f);
+                boundries[1] = (18f / 24f);
+                break;
+            case periods.night:
+                boundries[0] = (18f / 24f);
+                boundries[1] = (22f / 24f);
+                break;
+        }
+        return boundries;
+    }
+
+    public void activatePersons(){
+        foreach(Transform person in transform)
+        {
+            AgentNavigation navAgent = person.gameObject.GetComponent<AgentNavigation>();
+            GameObject actualPerson = person.gameObject;
+            if(!(actualPerson.activeSelf) && navAgent.periodBoundry[0] <= dayNightCycle.time && navAgent.periodBoundry[1] >= dayNightCycle.time)
+            {
+                actualPerson.SetActive(true);
             }
         }
     }

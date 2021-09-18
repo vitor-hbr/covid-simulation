@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75456ed9a94b89347b2abcea59a13acf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isInfected: 0
+  isInfected: 1
   infectionProbability: 0.03
   collisionThreshold: 200
   collisionCounter: 0

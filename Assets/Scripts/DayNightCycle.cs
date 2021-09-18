@@ -4,20 +4,9 @@ using UnityEngine;
 
 public class DayNightCycle : MonoBehaviour
 {
-    public enum periods
-    {
-        morning,
-        afternoon,
-        night
-    }
-
-    private periods[] Periods = {
-        periods.morning,
-        periods.afternoon,
-        periods.night
-    };
 
     [Range(0.0f, 1.0f)]
+    public float lastTime;
     public float time;
     public float fullDayLength;
     public float startTime = 0.4f;
@@ -70,25 +59,5 @@ public class DayNightCycle : MonoBehaviour
         RenderSettings.reflectionIntensity = reflectionsIntensityMultiplier.Evaluate(time);
     }
 
-    public float[] getPeriodBoundry(periods period)
-    {
-        float[] boundries = new float[2];
-        switch (period)
-        {
-            case periods.morning:
-                boundries[0] = (8f / 24f);
-                boundries[1] = (12f / 24f);
-                break;
-            case periods.afternoon:
-                boundries[0] = (12f / 24f);
-                boundries[1] = (18f / 24f);
-                break;
-            case periods.night:
-                boundries[0] = (18f / 24f);
-                boundries[1] = (22f / 24f);
-                break;
-        }
-        return boundries;
-    }
 }
 
