@@ -15,9 +15,10 @@ GameObject:
   - component: {fileID: 6588637096855284556}
   - component: {fileID: 6588637096855284557}
   - component: {fileID: 534671235703084689}
+  - component: {fileID: 5974092951021265558}
   m_Layer: 0
   m_Name: Person
-  m_TagString: Untagged
+  m_TagString: Person
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -135,6 +136,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chair: {fileID: 0}
+  exit: {fileID: 0}
+  start: {fileID: 0}
+  periodBoundry: []
+  dayNight: {fileID: 0}
 --- !u!114 &534671235703084689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,10 +152,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75456ed9a94b89347b2abcea59a13acf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isInfected: 1
+  isInfected: 0
   infectionProbability: 0.03
   collisionThreshold: 200
-  timeThreshold: 0
+  collisionCounter: 0
+--- !u!54 &5974092951021265558
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6588637096855284555}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 2
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &7881193216756146555
 GameObject:
   m_ObjectHideFlags: 0
@@ -163,7 +184,7 @@ GameObject:
   - component: {fileID: 6925718936412117830}
   - component: {fileID: 6925718936412117825}
   m_Layer: 0
-  m_Name: mouth
+  m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -199,7 +220,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -3879,7 +3900,7 @@ ParticleSystem:
     m_EnergyLossOnCollision:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: 1
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -3938,7 +3959,7 @@ ParticleSystem:
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
-    collisionMessages: 0
+    collisionMessages: 1
     collidesWithDynamic: 1
     interiorCollisions: 0
   TriggerModule:
