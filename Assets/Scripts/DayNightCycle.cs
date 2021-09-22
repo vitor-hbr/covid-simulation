@@ -8,10 +8,11 @@ public class DayNightCycle : MonoBehaviour
     [Range(0.0f, 1.0f)]
     public float lastTime;
     public float time;
-    public float fullDayLength;
+    private float fullDayLength = 80;
     public float startTime = 0.4f;
     private float timeRate;
     public Vector3 noon;
+    public float timeScale = 5;
 
     [Header("Sun")]
     public Light sun;
@@ -29,12 +30,14 @@ public class DayNightCycle : MonoBehaviour
 
     private void Start()
     {
-        timeRate = 1.0f / fullDayLength;
+        Time.timeScale = timeScale;
+        timeRate = 1 / (fullDayLength * timeScale) ;
         time = startTime;
     }
 
     private void Update()
     {
+        Time.timeScale = timeScale;
         time += timeRate * Time.deltaTime;
 
         if (time >= 1.0f)

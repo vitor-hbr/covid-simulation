@@ -18,7 +18,6 @@ public class Person : MonoBehaviour
     private float timeThreshold = 0;
     private ParticleSystem particles;
     public List<ParticleCollisionEvent> collisionEvents;
-
     void Start()
     {
         particles = transform.GetChild(0).gameObject.GetComponent<ParticleSystem>();

@@ -17,6 +17,11 @@ public class Population_Controller : MonoBehaviour
     private UnityEvent checkActivationPeriod;
     private float lastTime;
 
+    [SerializeField]
+    public List<Vaccine> vaccines;
+    private string[] vacNames = { "AstraZeneca", "Pfizer", "Coronavac", "Jansen", "Covaxin", "Sputnik", "Moderna" };
+    private float[] vacEfficacies = { 0.70f, 0.95f, 0.50f, 0.66f, 0.89f, 0.91f, 0.95f };
+    private float[] vacDistributions = { 0.70f, 0.95f, 0.50f, 0.66f, 0.89f, 0.91f, 0.95f };
     public enum periods
     {
         morning,
@@ -32,6 +37,7 @@ public class Population_Controller : MonoBehaviour
 
     private void Start()
     {
+        vaccines = generateVaccineList(vacNames, vacEfficacies, vacDistributions);
         Transform[] chairs = new Transform[classRooms.transform.childCount];
         dayNightCycle = dayNightObject.GetComponent<DayNightCycle>();
         for (int i = 0; i < classRooms.transform.childCount; i++)
@@ -131,5 +137,15 @@ public class Population_Controller : MonoBehaviour
                 actualPerson.SetActive(true);
             }
         }
+    }
+
+    public List<Vaccine> generateVaccineList(string[] names, float[] efficacies, float[] distributions)
+    {
+        List<Vaccine> l = new List<Vaccine>();
+        for (int i = 0; i < names.Length; i++)
+        {
+            l.Add(new Vaccine(names[i], efficacies[i], distributions[i]));
+        }
+        return l;
     }
 }
