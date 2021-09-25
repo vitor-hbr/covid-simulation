@@ -18,27 +18,23 @@ public class AgentNavigation : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(Vector3.Distance(chair.transform.position, transform.position));
         if (chair && exit)
         {
             if (dayNight.time > periodBoundry[0] && dayNight.time < periodBoundry[1])
             {
-                if (Vector3.Distance(chair.transform.position, transform.position) > 1)
+                if (Vector3.Distance(chair.transform.position, transform.position) > 3)
                 {
                     navMeshAgent.SetDestination(chair.transform.position);
                 }
                 else
                 {
                     Vector3 newRotation = chair.transform.rotation.eulerAngles - transform.rotation.eulerAngles;
-                    Debug.Log(chair.transform.rotation.eulerAngles);
-                    Debug.Log(transform.rotation.eulerAngles);
                     newRotation.x = 0;
                     transform.Rotate(newRotation);
                 }
             }
             else
-            if (Vector3.Distance(exit.transform.position, transform.position) > 1)
-            {
+            { 
                 navMeshAgent.SetDestination(exit.transform.position);
             }
         }
@@ -46,7 +42,6 @@ public class AgentNavigation : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other);
         gameObject.SetActive(false);
     }
 

@@ -161,6 +161,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: chair
       objectReference: {fileID: 0}
+    - target: {fileID: 1659484623178715232, guid: 82ffdb58553e07b4090197fe4779f0c4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1659484623178715232, guid: 82ffdb58553e07b4090197fe4779f0c4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.075
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 82ffdb58553e07b4090197fe4779f0c4, type: 3}
 --- !u!4 &2376645482314839164 stripped

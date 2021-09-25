@@ -10,18 +10,19 @@ public class Population_Controller : MonoBehaviour
     public GameObject start;
     public GameObject exit;
     public GameObject dayNightObject;
+    public GameObject UI;
 
     public int numberOfPeople;
-    public DayNightCycle dayNightCycle;
-
+    private DayNightCycle dayNightCycle;
+    private UICounter uICounter;
     private UnityEvent checkActivationPeriod;
     private float lastTime;
 
     [SerializeField]
     public List<Vaccine> vaccines;
-    private string[] vacNames = { "AstraZeneca", "Pfizer", "Coronavac", "Jansen", "Covaxin", "Sputnik", "Moderna" };
-    private float[] vacEfficacies = { 0.70f, 0.95f, 0.50f, 0.66f, 0.89f, 0.91f, 0.95f };
-    private float[] vacDistributions = { 0.70f, 0.95f, 0.50f, 0.66f, 0.89f, 0.91f, 0.95f };
+    private string[] vacNames = { "AstraZeneca", "Pfizer", "Coronavac" };
+    private float[] vacEfficacies = { 0.70f, 0.95f, 0.50f };
+    private float[] vacDistributions = { 0.70f, 0.95f, 0.50f};
     public enum periods
     {
         morning,
@@ -38,22 +39,23 @@ public class Population_Controller : MonoBehaviour
     private void Start()
     {
         vaccines = generateVaccineList(vacNames, vacEfficacies, vacDistributions);
-        Transform[] chairs = new Transform[classRooms.transform.childCount];
+        Transform[] tableChairs = new Transform[classRooms.transform.childCount];
         dayNightCycle = dayNightObject.GetComponent<DayNightCycle>();
+        uICounter = UI.GetComponent<UICounter>();
         for (int i = 0; i < classRooms.transform.childCount; i++)
         {
-            chairs[i] = classRooms.transform.GetChild(i).transform.Find("Chairs");
+            tableChairs[i] = classRooms.transform.GetChild(i).transform.Find("Tables and Chairs");
         }
         
-        int numberOfChairsPerClassRoom = chairs[0].childCount;
+        int numberOfPairsPerClassRoom = tableChairs[0].childCount;
         List<int> chairIndexesList = new List<int>();
 
-        for(int i = 0; i < numberOfChairsPerClassRoom; i++)
+        for(int i = 0; i < numberOfPairsPerClassRoom; i++)
         {
             chairIndexesList.Add(i);
         }
 
-        createPopulation(chairs, chairIndexesList);
+        createPopulation(tableChairs, chairIndexesList);
 
         lastTime = dayNightCycle.time;
         checkActivationPeriod = new UnityEvent();
@@ -71,39 +73,57 @@ public class Population_Controller : MonoBehaviour
         lastTime = dayNightCycle.time;
     }
 
-    void createPopulation(Transform[] chairs, List<int> chairIndexesList)
+    void createPopulation(Transform[] tableChairs, List<int> chairIndexesList)
     {
-        periods currentPeriod = periods.morning;
-        List<int> chairIndexesListCopy = new List<int>(chairIndexesList);
-        int currentClassRoom = 0;
+        List<List<int>> periodChairIndexesList = new List<List<int>>();
+
+        int infectedNumber = 0;
+
+        foreach(periods period in Periods)
+        {
+            periodChairIndexesList.Add(new List<int>(chairIndexesList));
+        }
+
+        int[] currentClassRoom = {0, 0, 0};
         for (int i = 0; i < numberOfPeople; i++)
         {
-            if(i % (numberOfPeople / 3) == 0 && i != 0)
-            {
-                chairIndexesListCopy = new List<int>(chairIndexesList);
-                currentClassRoom = 0;
-                currentPeriod++;
-            }
-            
-            Instantiate(personPrefab, start.transform.position, Quaternion.identity, transform);
+            int currentPeriod = i % 3;
+            Instantiate(personPrefab, exit.transform.position, Quaternion.identity, transform);
 
-            int randomIndex = UnityEngine.Random.Range(0, chairIndexesListCopy.Count);
-            Transform person = transform.GetChild(i);
-            AgentNavigation personNav = person.GetComponent<AgentNavigation>();
-            personNav.chair = chairs[currentClassRoom].GetChild(chairIndexesListCopy[randomIndex]).gameObject;
-            chairIndexesListCopy.RemoveAt(randomIndex);
-            personNav.periodBoundry = getPeriodBoundry(currentPeriod);
+            int randomIndex = UnityEngine.Random.Range(0, periodChairIndexesList[currentPeriod].Count);
+            Transform personTransform = transform.GetChild(i);
+
+            Person person = personTransform.GetComponent<Person>();
+
+            float initialInfectedProbability = Random.Range(0f, 1f);
+            if (initialInfectedProbability < 0.5f)
+            {
+                person.isInfected = true;
+                infectedNumber++;
+            }
+            else
+            {
+                person.isInfected = false;
+            }
+            person.uiCounter = uICounter;
+
+            AgentNavigation personNav = personTransform.GetComponent<AgentNavigation>();
+            Transform extractedChair = tableChairs[currentClassRoom[currentPeriod]].GetChild(periodChairIndexesList[currentPeriod][randomIndex]).GetChild(0).GetChild(0);
+            personNav.chair = extractedChair.gameObject;
+
+            periodChairIndexesList[currentPeriod].RemoveAt(randomIndex);
+            personNav.periodBoundry = getPeriodBoundry((periods) currentPeriod);
             personNav.dayNight = dayNightCycle;
             personNav.exit = exit; 
             personNav.start = start;
 
-
-            if (chairIndexesListCopy.Count == 0)
+            if (periodChairIndexesList[currentPeriod].Count == 0)
             {
-                currentClassRoom++;
-                chairIndexesListCopy = new List<int>(chairIndexesList);
+                currentClassRoom[currentPeriod]++;
+                periodChairIndexesList[currentPeriod] = new List<int>(chairIndexesList);
             }
         }
+        uICounter.setInfection(infectedNumber, numberOfPeople);
     }
 
     public float[] getPeriodBoundry(periods period)

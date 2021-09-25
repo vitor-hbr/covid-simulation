@@ -10,26 +10,22 @@ public class Person : MonoBehaviour
         Sneezing = 10
     }
 
-    public bool isInfected;
+    public bool isInfected = false;
     public float infectionProbability = 0.03f;
     public int collisionThreshold = 100;
     public int collisionCounter = 0;
-    private Actions currentAction = Actions.Breathing;
-    private float timeThreshold = 0;
-    private ParticleSystem particles;
     public List<ParticleCollisionEvent> collisionEvents;
+    public UICounter uiCounter;
+
+    private float timeThreshold = 0;
+    private Actions currentAction = Actions.Breathing;
+    private ParticleSystem particles;
+
+
     void Start()
     {
         particles = transform.GetChild(0).gameObject.GetComponent<ParticleSystem>();
         collisionEvents = new List<ParticleCollisionEvent>();
-        float initialInfectedProbability = Random.Range(0f, 1f);
-        if (initialInfectedProbability < 0.5f)
-        {
-            isInfected = true;            
-        } else
-        {
-            isInfected = false;
-        }
     }
 
     void Update()
@@ -46,7 +42,10 @@ public class Person : MonoBehaviour
             {
                 float infect = Random.Range(0f, 1f);
                 if (infect <= infectionProbability)
+                {
                     isInfected = true;
+                    uiCounter.newInfection();
+                }
                 collisionCounter = 0;
             }
         }
