@@ -6,8 +6,8 @@ public class Person : MonoBehaviour
 {
     private enum Actions {
         Breathing = 1,
-        Coughing = 10,
-        Sneezing = 40
+        Coughing = 4,
+        Sneezing = 8
     }
 
     public bool isInfected = false;
@@ -80,7 +80,7 @@ public class Person : MonoBehaviour
         var noise = particles.noise;
 
         var emission = particles.emission;
-        emission.rateOverTime = new ParticleSystem.MinMaxCurve(200f * currentActionFloat, 300f * currentActionFloat);
+        emission.rateOverTime = new ParticleSystem.MinMaxCurve(150f * currentActionFloat, 250f * currentActionFloat);
         var velocityOverTime = particles.velocityOverLifetime;
         velocityOverTime.x = 0f;
         velocityOverTime.y = -0.1f * currentActionFloat / 2;
