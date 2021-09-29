@@ -9,7 +9,7 @@ public class AgentNavigation : MonoBehaviour
     private NavMeshAgent navMeshAgent;
     public float[] periodBoundry;
     public DayNightCycle dayNight;
-
+    public Animator animator;
 
     private void Awake()
     {
@@ -25,12 +25,14 @@ public class AgentNavigation : MonoBehaviour
                 if (Vector3.Distance(chair.transform.position, transform.position) > 3)
                 {
                     navMeshAgent.SetDestination(chair.transform.position);
+                    animator.SetBool("isWalking", true);
                 }
                 else
                 {
                     Vector3 newRotation = chair.transform.rotation.eulerAngles - transform.rotation.eulerAngles;
                     newRotation.x = 0;
                     transform.Rotate(newRotation);
+                    animator.SetBool("isWalking", false);
                 }
             }
             else

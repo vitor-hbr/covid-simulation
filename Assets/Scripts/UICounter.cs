@@ -13,7 +13,6 @@ public class UICounter : MonoBehaviour
     {
         Transform title = transform.GetChild(0);
         text = title.GetComponent<TextMeshProUGUI>();
-        Debug.Log(text);
     }
 
     public void newInfection()
