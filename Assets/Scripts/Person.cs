@@ -5,9 +5,9 @@ using UnityEngine;
 public class Person : MonoBehaviour
 {
     private enum Actions {
-        Breathing = 1,
+        Breathing = 2,
         Coughing = 4,
-        Sneezing = 8
+        Sneezing = 6
     }
 
     public bool isInfected = false;
@@ -76,15 +76,11 @@ public class Person : MonoBehaviour
         var main = particles.main;
         float currentActionFloat = (float)currentAction;
         //main.duration = 1f / currentActionFloat;
-        main.startSpeed = 0.15f * currentActionFloat;
+        main.startSpeed = 0.15f * (currentActionFloat / 2);
         var noise = particles.noise;
 
         var emission = particles.emission;
         emission.rateOverTime = new ParticleSystem.MinMaxCurve(150f * currentActionFloat, 250f * currentActionFloat);
-        var velocityOverTime = particles.velocityOverLifetime;
-        velocityOverTime.x = 0f;
-        velocityOverTime.y = -0.1f * currentActionFloat / 2;
-        velocityOverTime.z = -0.1f * currentActionFloat;
         particles.Play();
     }
 
