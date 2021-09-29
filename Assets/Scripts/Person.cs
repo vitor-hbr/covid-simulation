@@ -6,8 +6,8 @@ public class Person : MonoBehaviour
 {
     private enum Actions {
         Breathing = 1,
-        Coughing = 5,
-        Sneezing = 10
+        Coughing = 10,
+        Sneezing = 40
     }
 
     public bool isInfected = false;
@@ -16,6 +16,7 @@ public class Person : MonoBehaviour
     public int collisionCounter = 0;
     public List<ParticleCollisionEvent> collisionEvents;
     public UICounter uiCounter;
+    public int onlyOneAction = -1;
 
     private float timeThreshold = 0;
     private Actions currentAction = Actions.Breathing;
@@ -60,11 +61,11 @@ public class Person : MonoBehaviour
         particles.Stop();
         timeThreshold = 0;
         float actionProbability = Random.Range(0f, 1f);
-        if (actionProbability <= 0.01)
+        if (onlyOneAction == (int)Actions.Sneezing || actionProbability <= 0.01)
         {
             currentAction = Actions.Sneezing;
         }
-        else if (actionProbability <= 0.06)
+        else if (onlyOneAction == (int)Actions.Coughing || actionProbability <= 0.06)
         {
             currentAction = Actions.Coughing;
         }
@@ -76,12 +77,14 @@ public class Person : MonoBehaviour
         float currentActionFloat = (float)currentAction;
         //main.duration = 1f / currentActionFloat;
         main.startSpeed = 0.15f * currentActionFloat;
+        var noise = particles.noise;
+
         var emission = particles.emission;
         emission.rateOverTime = new ParticleSystem.MinMaxCurve(200f * currentActionFloat, 300f * currentActionFloat);
         var velocityOverTime = particles.velocityOverLifetime;
         velocityOverTime.x = 0f;
         velocityOverTime.y = -0.1f * currentActionFloat / 2;
-        velocityOverTime.z = -0.05f * currentActionFloat;
+        velocityOverTime.z = -0.1f * currentActionFloat;
         particles.Play();
     }
 
