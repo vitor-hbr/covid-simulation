@@ -659,13 +659,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3234cf210d8d3644d8a9865810bb2200, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  personPrefab: {fileID: 5915225322193267628, guid: a2b5c59c1e933ee419f1cfc599310a73, type: 3}
+  personPrefab: {fileID: 4405675025153484397, guid: d753cd6572abe7e41bddbdc016e432ae, type: 3}
   classRooms: {fileID: 1341337054}
   start: {fileID: 1753051704}
   exit: {fileID: 488846029}
   dayNightObject: {fileID: 816580046}
   UI: {fileID: 341088476}
-  numberOfPeople: 10
+  numberOfPeople: 180
+  maskUsage:
+  - 0.1
+  - 0.9
+  - 1
   vaccines: []
 --- !u!1 &816580046
 GameObject:

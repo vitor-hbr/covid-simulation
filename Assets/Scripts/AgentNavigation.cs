@@ -36,7 +36,8 @@ public class AgentNavigation : MonoBehaviour
                 }
             }
             else
-            { 
+            {
+                animator.SetBool("isWalking", true);
                 navMeshAgent.SetDestination(exit.transform.position);
             }
         }

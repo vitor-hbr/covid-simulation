@@ -86,7 +86,6 @@ public class Person : MonoBehaviour
         }
         var main = particles.main;
         float currentActionFloat = (float)currentAction;
-        //main.duration = 1f / currentActionFloat;
         main.startSpeed = 0.15f * (currentActionFloat / 2);
         var noise = particles.noise;
 
