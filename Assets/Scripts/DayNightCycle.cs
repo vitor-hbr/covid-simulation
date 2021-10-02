@@ -9,7 +9,7 @@ public class DayNightCycle : MonoBehaviour
     public float lastTime;
     public float time;
     private float fullDayLength = 80;
-    public float startTime = 0.4f;
+    public float startTime = 0.0f;
     private float timeRate;
     public Vector3 noon;
     public float timeScale = 5;
@@ -39,9 +39,13 @@ public class DayNightCycle : MonoBehaviour
     {
         Time.timeScale = timeScale;
         time += timeRate * Time.deltaTime;
+        //Debug.Log(time);
 
         if (time >= 1.0f)
+        {
+            Debug.LogWarning("pare");
             time = 0.0f;
+        }
 
         sun.transform.eulerAngles = (time - 0.25f) * noon * 4.0f;
         moon.transform.eulerAngles = (time - 0.75f) * noon * 4.0f;

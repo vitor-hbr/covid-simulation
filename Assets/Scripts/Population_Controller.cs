@@ -18,6 +18,8 @@ public class Population_Controller : MonoBehaviour
     private UnityEvent checkActivationPeriod;
     private float lastTime;
 
+    public float[] maskUsage = { 0.10f, 0.9f, 1f };
+
     [SerializeField]
     public List<Vaccine> vaccines;
     private string[] vacNames = { "AstraZeneca", "Pfizer", "Coronavac" };
@@ -94,6 +96,19 @@ public class Population_Controller : MonoBehaviour
             Transform personTransform = transform.GetChild(i);
 
             Person person = personTransform.GetComponent<Person>();
+
+            float randomMaskProb = Random.Range(0f, 1f);
+
+            if (randomMaskProb <= maskUsage[0])
+            {
+                person.mask = Person.Masks.None;
+            } else if (randomMaskProb <= maskUsage[1])
+            {
+                person.mask = Person.Masks.Cloth;
+            } else
+            {
+                person.mask = Person.Masks.N95;
+            }
 
             float initialInfectedProbability = Random.Range(0f, 1f);
             if (initialInfectedProbability < 0.5f)
