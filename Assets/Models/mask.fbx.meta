@@ -3,7 +3,17 @@ guid: e4c0dd9504ceea94788f6749c486b371
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cordao
+    second: {fileID: 2100000, guid: dd7923664e4940e4e8eaa13dbadcb681, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mask
+    second: {fileID: 2100000, guid: 22caec1fe91e9634ba85f1bd668c3930, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

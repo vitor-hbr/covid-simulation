@@ -43,7 +43,6 @@ public class DayNightCycle : MonoBehaviour
 
         if (time >= 1.0f)
         {
-            Debug.LogWarning("pare");
             time = 0.0f;
         }
 
