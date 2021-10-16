@@ -22,14 +22,16 @@ public class Person : MonoBehaviour
     public bool isInfected = false;
     
     public float infectionProbability = 0.129f;
-    public int collisionThreshold = 130;
+    public int collisionThreshold = 280;
     public int collisionCounter = 0;
     public List<ParticleCollisionEvent> collisionEvents;
     public UICounter uiCounter;
     public int onlyOneAction = -1;
+    public Vaccine vaccine;
+    public Masks mask = Masks.None;
+    public SkinnedMeshRenderer skinnedMeshRenderer;
 
     private float timeThreshold = 0;
-    public Masks mask = Masks.None;
     private Actions currentAction = Actions.Breathing;
     private ParticleSystem particles;
 
@@ -53,10 +55,11 @@ public class Person : MonoBehaviour
             if(collisionCounter > collisionThreshold)
             {
                 float infect = Random.Range(0f, 1f);
-                if (infect <= infectionProbability)
+                if (infect <= infectionProbability * (1 - vaccine.efficacy))
                 {
                     isInfected = true;
                     uiCounter.newInfection();
+                    skinnedMeshRenderer.material.color = new Color(1, 0, 0);
                 }
                 collisionCounter = 0;
             }
@@ -90,7 +93,8 @@ public class Person : MonoBehaviour
         var noise = particles.noise;
 
         var emission = particles.emission;
-        emission.rateOverTime = new ParticleSystem.MinMaxCurve(150f * currentActionFloat * ((float) mask / 100), 250f * currentActionFloat * ((float) mask / 100));
+        if (3f * currentActionFloat * ((float)mask / 100) < 1) emission.rateOverTime = 1;
+        emission.rateOverTime = new ParticleSystem.MinMaxCurve(1f * currentActionFloat * ((float) mask / 100), 3f * currentActionFloat * ((float) mask / 100));
         particles.Play();
     }
 

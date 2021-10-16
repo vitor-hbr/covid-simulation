@@ -115,7 +115,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 20
+      scalar: 10800
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -1541,7 +1541,7 @@ ParticleSystem:
     y:
       serializedVersion: 2
       minMaxState: 0
-      scalar: -0.1
+      scalar: -0.01
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -2682,7 +2682,7 @@ ParticleSystem:
     strength:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: 0.01
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -2735,7 +2735,7 @@ ParticleSystem:
     strengthY:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.08
+      scalar: 0.03
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -2788,7 +2788,7 @@ ParticleSystem:
     strengthZ:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.1
+      scalar: 0.02
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -3728,7 +3728,7 @@ ParticleSystem:
     m_EnergyLossOnCollision:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0.89
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -5043,7 +5043,12 @@ MonoBehaviour:
   collisionCounter: 0
   uiCounter: {fileID: 0}
   onlyOneAction: -1
+  vaccine:
+    name: 
+    efficacy: 0
+    popDistribution: 0
   mask: 100
+  skinnedMeshRenderer: {fileID: 0}
 --- !u!1 &4512387250797587213
 GameObject:
   m_ObjectHideFlags: 0
@@ -5116,6 +5121,7 @@ GameObject:
   m_Component:
   - component: {fileID: 670738854650577553}
   - component: {fileID: 6569153657695403495}
+  - component: {fileID: 6499947147850872742}
   m_Layer: 0
   m_Name: Cube.001
   m_TagString: Untagged
@@ -5198,6 +5204,24 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.0013783164, y: 0.0006030416, z: 0.010249693}
     m_Extent: {x: 0.018945217, y: 0.016840514, z: 0.034334976}
   m_DirtyAABB: 0
+--- !u!114 &6499947147850872742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5274559866773379884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 0.14175344, g: 1, b: 0, a: 1}
+  outlineWidth: 5.02
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &5782856920737621507
 GameObject:
   m_ObjectHideFlags: 0

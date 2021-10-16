@@ -665,7 +665,7 @@ MonoBehaviour:
   exit: {fileID: 488846029}
   dayNightObject: {fileID: 816580046}
   UI: {fileID: 341088476}
-  numberOfPeople: 1
+  numberOfPeople: 500
   maskUsage:
   - 0.5
   - 0.9
@@ -718,7 +718,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lastTime: 0
   time: 0
-  startTime: 0.25
+  startTime: 0.34
   noon: {x: 90, y: 0, z: 0}
   timeScale: 2
   sun: {fileID: 1187973189}

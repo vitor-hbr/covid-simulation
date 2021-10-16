@@ -11,8 +11,8 @@ public class Population_Controller : MonoBehaviour
     public GameObject exit;
     public GameObject dayNightObject;
     public GameObject UI;
-
     public int numberOfPeople;
+    
     private DayNightCycle dayNightCycle;
     private UICounter uICounter;
     private UnityEvent checkActivationPeriod;
@@ -22,9 +22,10 @@ public class Population_Controller : MonoBehaviour
 
     [SerializeField]
     public List<Vaccine> vaccines;
-    private string[] vacNames = { "AstraZeneca", "Pfizer", "Coronavac" };
-    private float[] vacEfficacies = { 0.70f, 0.95f, 0.50f };
-    private float[] vacDistributions = { 0.70f, 0.95f, 0.50f};
+    private string[] vacNames = { "AstraZeneca", "Pfizer", "Coronavac", "None" };
+    private float[] vacEfficacies = { 0.70f, 0.95f, 0.50f, 0.0f};
+    private float[] vacUsage = { 0.30f, 0.75f, 0.99f, 1f};
+    private Color[] vacColor = { new Color(1, 0.9096057f, 0.2688679f), new Color(0.1417534f, 1, 0), new Color(1, 0.5414941f, 0), new Color(1, 0, 0) };
     public enum periods
     {
         morning,
@@ -40,7 +41,7 @@ public class Population_Controller : MonoBehaviour
 
     private void Start()
     {
-        vaccines = generateVaccineList(vacNames, vacEfficacies, vacDistributions);
+        vaccines = generateVaccineList(vacNames, vacEfficacies, vacUsage);
         Transform[] tableChairs = new Transform[classRooms.transform.childCount];
         dayNightCycle = dayNightObject.GetComponent<DayNightCycle>();
         uICounter = UI.GetComponent<UICounter>();
@@ -97,6 +98,8 @@ public class Population_Controller : MonoBehaviour
 
             Person person = personTransform.GetComponent<Person>();
 
+            person.skinnedMeshRenderer = person.transform.GetChild(3).GetComponent<SkinnedMeshRenderer>();
+
             float randomMaskProb = Random.Range(0f, 1f);
 
             if (randomMaskProb <= maskUsage[0])
@@ -110,11 +113,35 @@ public class Population_Controller : MonoBehaviour
                 person.mask = Person.Masks.N95;
             }
 
+            float randomVaccineProb = Random.Range(0f, 1f);
+            Outline personOutline = person.transform.GetChild(3).GetComponent<Outline>();
+
+            if (randomVaccineProb <= vacUsage[0])
+            {
+                person.vaccine = vaccines[0];
+                personOutline.OutlineColor = vacColor[0];
+            }
+            else if (randomVaccineProb <= vacUsage[1])
+            {
+                person.vaccine = vaccines[1];
+                personOutline.OutlineColor = vacColor[1];
+            }
+            else if(randomVaccineProb <= vacUsage[2])
+            {
+                person.vaccine = vaccines[2];
+                personOutline.OutlineColor = vacColor[2];
+            } else
+            {
+                person.vaccine = vaccines[3];
+                personOutline.OutlineColor = vacColor[3];
+            }
+
             float initialInfectedProbability = Random.Range(0f, 1f);
             if (initialInfectedProbability < 0.5f)
             {
                 person.isInfected = true;
                 infectedNumber++;
+                person.skinnedMeshRenderer.material.color = new Color(1, 0, 0); 
             }
             else
             {
