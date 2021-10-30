@@ -156,8 +156,15 @@ public class Population_Controller : MonoBehaviour
             periodChairIndexesList[currentPeriod].RemoveAt(randomIndex);
             personNav.periodBoundry = getPeriodBoundry((periods) currentPeriod);
             personNav.dayNight = dayNightCycle;
-            personNav.exit = exit; 
-            personNav.start = start;
+            personNav.exit = exit;
+
+            int randomStartingPoint = UnityEngine.Random.Range(0, start.transform.childCount);
+            Bounds[] startingBounds = new Bounds[start.transform.childCount];
+            for (int j = 0; j < start.transform.childCount; j++)
+            {
+                startingBounds[j] = start.transform.GetChild(randomStartingPoint).GetComponent<BoxCollider>().bounds;
+            }
+            personNav.start = RandomPointInBounds(startingBounds[randomStartingPoint]);
 
             if (periodChairIndexesList[currentPeriod].Count == 0)
             {
@@ -209,5 +216,14 @@ public class Population_Controller : MonoBehaviour
             l.Add(new Vaccine(names[i], efficacies[i], distributions[i]));
         }
         return l;
+    }
+
+    public static Vector3 RandomPointInBounds(Bounds bounds)
+    {
+        return new Vector3(
+            Random.Range(bounds.min.x, bounds.max.x),
+            Random.Range(bounds.min.y, bounds.max.y),
+            Random.Range(bounds.min.z, bounds.max.z)
+        );
     }
 }

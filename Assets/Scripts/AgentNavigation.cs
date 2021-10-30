@@ -5,7 +5,7 @@ public class AgentNavigation : MonoBehaviour
 {
     public GameObject chair;
     public GameObject exit;
-    public GameObject start;
+    public Vector3 start;
     private NavMeshAgent navMeshAgent;
     public float[] periodBoundry;
     public DayNightCycle dayNight;
@@ -50,6 +50,6 @@ public class AgentNavigation : MonoBehaviour
 
     private void OnDisable()
     {
-        transform.position = start.transform.position;
+        transform.position = start;
     }
 }
