@@ -15,11 +15,10 @@ MonoBehaviour:
   numberOfDays: 5
   numberOfAgents: 1500
   vaccineProportion:
-  - 0.2
-  - 0.2
-  - 0.2
-  - 0.2
-  - 0.2
+  - 0.18584134
+  - 0.104550324
+  - 0.6066197
+  - 0.10298857
   usageProportion:
   - 0.3
   - 0.44
