@@ -103,10 +103,11 @@ public class UICounter : MonoBehaviour
         updateUI();
     }
 
-    public void setInfection(int infected, int totalPopulation)
+    public void setInfection(int infected)
     {
         ReportData.totalInfected = infected;
         ReportData.numberOfInfectByDay.Add(infected);
+        
         updateUI();
     }
     public void setTime(string timeText)

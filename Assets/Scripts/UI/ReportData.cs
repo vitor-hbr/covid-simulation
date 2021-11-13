@@ -42,4 +42,10 @@ public class ReportData : ScriptableObject
             maskList.Add(0);
         }
     }
+
+    public static float avgDailyCases()
+    {
+        int realTotalInfected = totalInfected - numberOfInfectByDay[0];
+        return (float) (realTotalInfected / (numberOfInfectByDay.Count));
+    }
 }

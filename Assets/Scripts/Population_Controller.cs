@@ -206,7 +206,7 @@ public class Population_Controller : MonoBehaviour
                 periodChairIndexesList[currentPeriod] = new List<int>(chairIndexesList);
             }
         }
-        uICounter.setInfection(infectedNumber, settingsData.numberOfAgents);
+        uICounter.setInfection(infectedNumber);
     }
 
     public float[] getPeriodBoundry(periods period)
