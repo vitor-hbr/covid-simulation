@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
+
 
 public class UISettings : MonoBehaviour
 {
@@ -11,6 +13,7 @@ public class UISettings : MonoBehaviour
     public GameObject UsageObject;
     private Slider[] VaccineSliders = new Slider[4];
     private Slider[] UsageSliders = new Slider[3];
+    private TMP_Text percentageValue;
     public TMP_InputField numberOfDaysInput;
     public TMP_InputField numberOfAgentsInput;
     public Slider percentageInfectSlider;
@@ -18,44 +21,39 @@ public class UISettings : MonoBehaviour
     private float[] prevUsageValues = new float[3];
     public TMP_Text[] UsageSlidersValues;
     public TMP_Text[] VaccineSlidersValues;
-    void Start()
+    public GameObject percentageValueObject;
+    void Awake()
     {
-        numberOfDaysInput.text = settingsData.numberOfDays.ToString();
-        numberOfAgentsInput.text = settingsData.numberOfAgents.ToString();
-
-        for (int i = 0; i < VacObject.transform.childCount; i++)
-        {
-            VaccineSliders[i] = VacObject.transform.GetChild(i).GetComponent<Slider>();
-            VaccineSliders[i].value = settingsData.vaccineProportion[i];
-            prevVacValues[i] = settingsData.vaccineProportion[i];
-        }
-
-        for (int i = 0; i < UsageObject.transform.childCount; i++)
-        {
-            UsageSliders[i] = UsageObject.transform.GetChild(i).GetComponent<Slider>();
-            UsageSliders[i].value = settingsData.usageProportion[i];
-            prevUsageValues[i] = settingsData.usageProportion[i];
-        }
-
-        for (int i = 0; i < VaccineSliders.Length; i++)
-        {
-            Slider vaccineSlider = VaccineSliders[i];
-            vaccineSlider.value = settingsData.vaccineProportion[i];
-        }
-        
-
-        percentageInfectSlider.value = settingsData.percentageOfInfected;
+        percentageValue = percentageValueObject.GetComponent<TMP_Text>();
+        Reset();
     }   
+
+    private void setSliderValues(Slider[] sliders, float[] prevValues, GameObject objectN, float[] proportions)
+    {
+
+        for (int i = 0; i < objectN.transform.childCount; i++)
+        {
+            sliders[i] = objectN.transform.GetChild(i).GetComponent<Slider>();
+            prevValues[i] = proportions[i] * 100;
+        }
+
+        float[] proportionsCopy = (float[]) proportions.Clone();
+        for (int i = 0; i < sliders.Length; i++)
+        {
+            sliders[i].value = proportionsCopy[i] * 100;
+        }
+    }
 
     private void onChangeGenericSliders(Slider[] Sliders, TMP_Text[] slidersValues, float[] valuesProportions, 
     float[] prevValues, int sliderOpt) {
-        float remaining = 0;
+        float remaining;
         float total = 0;
         int iterator = 0;
         foreach (Slider slider in Sliders)
         {
             total += slider.value;
-            slidersValues[iterator].text = (Sliders[iterator].value).ToString();
+
+            slidersValues[iterator].text = (Sliders[iterator].value).ToString("0.00") + "%";
             valuesProportions[iterator++] = slider.value/100;
         }
         remaining = 100 - total;
@@ -77,7 +75,7 @@ public class UISettings : MonoBehaviour
             iterator = 0;
             foreach (Slider slider in Sliders)
             {
-                slidersValues[iterator].text = (Sliders[iterator].value).ToString();
+                slidersValues[iterator].text = (Sliders[iterator].value).ToString("0.00") + "%";
                 slider.value = valuesProportions[iterator++] * 100;
             }
 
@@ -94,13 +92,49 @@ public class UISettings : MonoBehaviour
         onChangeGenericSliders(UsageSliders, UsageSlidersValues, settingsData.usageProportion, prevUsageValues, sliderOpt);
     }
 
+    public void OnChangePercentageSlider()
+    {
+        percentageValue.text = (percentageInfectSlider.value * 100).ToString("0.00") + "%";
+    }
+
+    private void updateSliderProportions(float[] currentProportions, Slider[] sliders) 
+    {
+        int i = 0;
+        foreach(Slider slider in sliders)
+        {
+            currentProportions[i++] = slider.value/100;
+        }
+    }
+
+    public void Reset()
+    {
+        settingsData.numberOfDays = 5;
+        settingsData.numberOfAgents = 1500;
+        settingsData.vaccineProportion = new float[] { 0.30f, 0.44f, 0.25f, 0.01f };
+        settingsData.usageProportion = new float[] { 0.10f, 0.80f, 0.10f };
+        settingsData.percentageOfInfected = 0.10f;
+
+
+        numberOfDaysInput.text = settingsData.numberOfDays.ToString();
+        numberOfAgentsInput.text = settingsData.numberOfAgents.ToString();
+        percentageValue.text = (settingsData.percentageOfInfected * 100).ToString("0.00") + "%";
+
+        setSliderValues(VaccineSliders, prevVacValues, VacObject, settingsData.vaccineProportion);
+        setSliderValues(UsageSliders, prevUsageValues, UsageObject, settingsData.usageProportion);
+
+        percentageInfectSlider.value = settingsData.percentageOfInfected;
+    }
+
     public void OnPlay()
     {
         settingsData.numberOfDays = int.Parse(numberOfDaysInput.text);
         settingsData.numberOfAgents = int.Parse(numberOfAgentsInput.text);
         settingsData.percentageOfInfected = percentageInfectSlider.value;
 
-        
-       
+        updateSliderProportions(settingsData.vaccineProportion, VaccineSliders);
+        updateSliderProportions(settingsData.usageProportion, UsageSliders);
+
+        SceneManager.LoadScene("Simulation", LoadSceneMode.Single);
     }
+
 }

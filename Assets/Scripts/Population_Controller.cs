@@ -11,21 +11,22 @@ public class Population_Controller : MonoBehaviour
     public GameObject exit;
     public GameObject dayNightObject;
     public GameObject UI;
-    public int numberOfPeople;
-    
+    public SettingsData settingsData;
+
     private DayNightCycle dayNightCycle;
     private UICounter uICounter;
     private UnityEvent checkActivationPeriod;
     private float lastTime;
 
-    public float[] maskUsage = { 0.10f, 0.9f, 1f };
+    public float[] maskUsage;
 
     [SerializeField]
     public List<Vaccine> vaccines;
-    private string[] vacNames = { "AstraZeneca", "Pfizer", "Coronavac", "None" };
+    public static string[] vacNames = { "AstraZeneca", "Pfizer", "Coronavac", "None" };
     private float[] vacEfficacies = { 0.70f, 0.95f, 0.50f, 0.0f};
-    private float[] vacUsage = { 0.30f, 0.75f, 0.99f, 1f};
+    private float[] vacUsage;
     private Color[] vacColor = { new Color(1, 0.9096057f, 0.2688679f), new Color(0.1417534f, 1, 0), new Color(1, 0.5414941f, 0), new Color(1, 0, 0) };
+    
     public enum periods
     {
         morning,
@@ -41,7 +42,11 @@ public class Population_Controller : MonoBehaviour
 
     private void Start()
     {
+        maskUsage = buildAccumulativeArray(settingsData.usageProportion);
+        vacUsage = buildAccumulativeArray(settingsData.vaccineProportion);
+
         vaccines = generateVaccineList(vacNames, vacEfficacies, vacUsage);
+
         Transform[] tableChairs = new Transform[classRooms.transform.childCount];
         dayNightCycle = dayNightObject.GetComponent<DayNightCycle>();
         uICounter = UI.GetComponent<UICounter>();
@@ -76,9 +81,26 @@ public class Population_Controller : MonoBehaviour
         lastTime = dayNightCycle.time;
     }
 
+    float[] buildAccumulativeArray(float[] array)
+    {
+        float[] copy = (float[])array.Clone();
+        float counter = 0;
+        for (int i = 0; i < array.Length; i++)
+        {
+            counter += array[i];
+            copy[i] = counter;
+        }
+        return copy;
+    }
+
     void createPopulation(Transform[] tableChairs, List<int> chairIndexesList)
     {
         List<List<int>> periodChairIndexesList = new List<List<int>>();
+
+        List<int> initialInfectionList = generateInfectedList();
+
+        ReportData.generateVaccineList(vacNames);
+        ReportData.newDay();
 
         int infectedNumber = 0;
 
@@ -88,7 +110,7 @@ public class Population_Controller : MonoBehaviour
         }
 
         int[] currentClassRoom = {0, 0, 0};
-        for (int i = 0; i < numberOfPeople; i++)
+        for (int i = 0; i < settingsData.numberOfAgents; i++)
         {
             int currentPeriod = i % 3;
             Instantiate(personPrefab, exit.transform.position, Quaternion.identity, transform);
@@ -100,17 +122,34 @@ public class Population_Controller : MonoBehaviour
 
             person.skinnedMeshRenderer = person.transform.GetChild(3).GetComponent<SkinnedMeshRenderer>();
 
+            int infectionIndex = Random.Range(0, initialInfectionList.Count);
+            if (initialInfectionList[infectionIndex] == 1)
+            {
+                person.isInfected = true;
+                infectedNumber++;
+                person.skinnedMeshRenderer.material.color = new Color(1, 0, 0);
+            }
+            else
+            {
+                person.isInfected = false;
+            }
+            initialInfectionList.RemoveAt(infectionIndex);
+
             float randomMaskProb = Random.Range(0f, 1f);
 
             if (randomMaskProb <= maskUsage[0])
             {
-                person.mask = Person.Masks.None;
+                person.mask = Person.Masks.Cloth;
+                ReportData.maskInfected[0][0]++;
             } else if (randomMaskProb <= maskUsage[1])
             {
-                person.mask = Person.Masks.Cloth;
-            } else
-            {
                 person.mask = Person.Masks.N95;
+                ReportData.maskInfected[1][0]++;
+            }
+            else
+            {
+                person.mask = Person.Masks.None;
+                ReportData.maskInfected[2][0]++;
             }
 
             float randomVaccineProb = Random.Range(0f, 1f);
@@ -120,33 +159,28 @@ public class Population_Controller : MonoBehaviour
             {
                 person.vaccine = vaccines[0];
                 personOutline.OutlineColor = vacColor[0];
+                ReportData.vaccineInfected[0][0]++;
             }
             else if (randomVaccineProb <= vacUsage[1])
             {
                 person.vaccine = vaccines[1];
                 personOutline.OutlineColor = vacColor[1];
+                ReportData.vaccineInfected[1][0]++;
             }
             else if(randomVaccineProb <= vacUsage[2])
             {
                 person.vaccine = vaccines[2];
                 personOutline.OutlineColor = vacColor[2];
-            } else
-            {
-                person.vaccine = vaccines[3];
-                personOutline.OutlineColor = vacColor[3];
-            }
-
-            float initialInfectedProbability = Random.Range(0f, 1f);
-            if (initialInfectedProbability < 0.5f)
-            {
-                person.isInfected = true;
-                infectedNumber++;
-                person.skinnedMeshRenderer.material.color = new Color(1, 0, 0); 
+                ReportData.vaccineInfected[2][0]++;
             }
             else
             {
-                person.isInfected = false;
+                person.vaccine = vaccines[3];
+                personOutline.OutlineColor = vacColor[3];
+                ReportData.vaccineInfected[3][0]++;
             }
+
+              
             person.uiCounter = uICounter;
 
             AgentNavigation personNav = personTransform.GetComponent<AgentNavigation>();
@@ -172,7 +206,7 @@ public class Population_Controller : MonoBehaviour
                 periodChairIndexesList[currentPeriod] = new List<int>(chairIndexesList);
             }
         }
-        uICounter.setInfection(infectedNumber, numberOfPeople);
+        uICounter.setInfection(infectedNumber, settingsData.numberOfAgents);
     }
 
     public float[] getPeriodBoundry(periods period)
@@ -226,4 +260,19 @@ public class Population_Controller : MonoBehaviour
             Random.Range(bounds.min.z, bounds.max.z)
         );
     }
+
+    private List<int> generateInfectedList()
+    {
+        List<int> infectedArray = new List<int>();
+        for (int i = 0; i < settingsData.numberOfAgents * settingsData.percentageOfInfected; i++)
+        {
+            infectedArray.Add(1);
+        }
+        for (int i = 0; i < settingsData.numberOfAgents * (1 - settingsData.percentageOfInfected); i++)
+        {
+            infectedArray.Add(0);
+        }
+        return infectedArray;
+    }
+
 }

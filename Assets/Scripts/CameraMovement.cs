@@ -8,10 +8,6 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private float rotationSpeed = 10.0f;
     [SerializeField] private float zoomSpeed = 10.0f;
 
-    //Cache last pos and rot be able to undo last focus object action.
-    Quaternion prevRot = new Quaternion();
-    Vector3 prevPos = new Vector3();
-
     [Header("Axes Names")]
     [SerializeField, Tooltip("Otherwise known as the vertical axis")] private string mouseY = "Mouse Y";
     [SerializeField, Tooltip("AKA horizontal axis")] private string mouseX = "Mouse X";
@@ -48,21 +44,22 @@ public class CameraMovement : MonoBehaviour
         //Move the camera when anchored
         if (Input.GetKey(anchoredMoveKey))
         {
-            move += (Vector3.up * mouseMoveY * -moveSpeed) / Time.timeScale;
-            move += (Vector3.right * mouseMoveX * -moveSpeed) / Time.timeScale;
+            move += (Vector3.up * mouseMoveY * -moveSpeed) / (Time.unscaledDeltaTime * 100);
+            move += (Vector3.right * mouseMoveX * -moveSpeed) / (Time.unscaledDeltaTime * 100);
         }
 
         //Rotate the camera when anchored
         if (Input.GetKey(anchoredRotateKey))
         {
-            transform.RotateAround(transform.position, transform.right, mouseMoveY * -rotationSpeed / Time.timeScale);
-            transform.RotateAround(transform.position, Vector3.up, mouseMoveX * rotationSpeed / Time.timeScale);
+            transform.RotateAround(transform.position, transform.right, mouseMoveY * -rotationSpeed / (Time.unscaledDeltaTime * 100));
+            transform.RotateAround(transform.position, Vector3.up, mouseMoveX * rotationSpeed / (Time.unscaledDeltaTime * 100));
         }
 
         transform.Translate(move);
 
         //Scroll to zoom
         float mouseScroll = Input.GetAxis(zoomAxis);
-        transform.Translate(Vector3.forward * mouseScroll * zoomSpeed / Time.timeScale);
+
+        transform.Translate(Vector3.forward * mouseScroll * zoomSpeed / (Time.unscaledDeltaTime * 100));
     }
 }

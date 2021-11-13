@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class DayNightCycle : MonoBehaviour
 {
@@ -11,8 +13,8 @@ public class DayNightCycle : MonoBehaviour
     private float fullDayLength = 86400;
     public float startTime = 0.34f;
     private float timeRate;
+    public int currentDayNumber = 1;
     public Vector3 noon;
-    public float timeScale = 1;
 
     [Header("Sun")]
     public Light sun;
@@ -27,23 +29,37 @@ public class DayNightCycle : MonoBehaviour
     [Header("Other")]
     public AnimationCurve lightingIntensityMultiplier;
     public AnimationCurve reflectionsIntensityMultiplier;
+    public GameObject UI;
+
+    public SettingsData settingsData;
+    private UICounter uiCounter;
 
     private void Start()
     {
-        Time.timeScale = timeScale;
-        timeRate = timeScale / fullDayLength ;
+        timeRate = Time.timeScale / fullDayLength ;
         time = startTime;
+        uiCounter = UI.GetComponent<UICounter>();
+        ReportData.newDay();
+        uiCounter.setDays(currentDayNumber, settingsData.numberOfDays);
+        foreach(var item in ReportData.vaccineInfected)
+            Debug.Log(item[0]);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        Time.timeScale = timeScale;
         time += timeRate * Time.deltaTime;
-        //Debug.Log(time);
+        uiCounter.setTime(CalculateTimeText());
 
         if (time >= 1.0f)
         {
+            currentDayNumber++;
             time = 0.0f;
+            if(currentDayNumber > settingsData.numberOfDays)
+            {
+                SceneManager.LoadScene("Report", LoadSceneMode.Single);
+            }
+            ReportData.newDay();
+            uiCounter.setDays(currentDayNumber, settingsData.numberOfDays);
         }
 
         sun.transform.eulerAngles = (time - 0.25f) * noon * 4.0f;
@@ -63,6 +79,13 @@ public class DayNightCycle : MonoBehaviour
 
         RenderSettings.ambientIntensity = lightingIntensityMultiplier.Evaluate(time);
         RenderSettings.reflectionIntensity = reflectionsIntensityMultiplier.Evaluate(time);
+    }
+
+    private string CalculateTimeText()
+    {
+        int numberOfHours = (int) (time * 24);
+        int numberOfMinutes = (int) Mathf.Floor((time * 24 - numberOfHours) * 60);
+        return $"{(numberOfHours < 10 ? "0" : "")}{numberOfHours}:{(numberOfMinutes < 10 ? "0" : "")}{numberOfMinutes}";
     }
 
 }

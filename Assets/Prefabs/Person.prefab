@@ -5021,7 +5021,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chair: {fileID: 0}
   exit: {fileID: 0}
-  start: {fileID: 0}
+  start: {x: 0, y: 0, z: 0}
   periodBoundry: []
   dayNight: {fileID: 0}
   animator: {fileID: 6958033317112899245}

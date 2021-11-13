@@ -14,9 +14,9 @@ public class Person : MonoBehaviour
 
     public enum Masks
     {
-        None = 100,
         Cloth = 45,
         N95 = 5,
+        None = 100,
     }
 
     public bool isInfected = false;
@@ -58,7 +58,7 @@ public class Person : MonoBehaviour
                 if (infect <= infectionProbability * (1 - vaccine.efficacy))
                 {
                     isInfected = true;
-                    uiCounter.newInfection();
+                    uiCounter.newInfection(mask, vaccine);
                     skinnedMeshRenderer.material.color = new Color(1, 0, 0);
                 }
                 collisionCounter = 0;
@@ -93,7 +93,9 @@ public class Person : MonoBehaviour
         var noise = particles.noise;
 
         var emission = particles.emission;
-        if (3f * currentActionFloat * ((float)mask / 100) < 1) emission.rateOverTime = 1;
+        if (3f * currentActionFloat * ((float)mask / 100) < 1) {
+            emission.rateOverTime = 1; 
+        }
         emission.rateOverTime = new ParticleSystem.MinMaxCurve(1f * currentActionFloat * ((float) mask / 100), 3f * currentActionFloat * ((float) mask / 100));
         particles.Play();
     }
