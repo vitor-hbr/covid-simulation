@@ -41,8 +41,6 @@ public class DayNightCycle : MonoBehaviour
         uiCounter = UI.GetComponent<UICounter>();
         ReportData.newDay();
         uiCounter.setDays(currentDayNumber, settingsData.numberOfDays);
-        foreach(var item in ReportData.vaccineInfected)
-            Debug.Log(item[0]);
     }
 
     private void FixedUpdate()
@@ -57,9 +55,11 @@ public class DayNightCycle : MonoBehaviour
             if(currentDayNumber > settingsData.numberOfDays)
             {
                 SceneManager.LoadScene("Report", LoadSceneMode.Single);
+            } else
+            {
+                ReportData.newDay();
+                uiCounter.setDays(currentDayNumber, settingsData.numberOfDays);
             }
-            ReportData.newDay();
-            uiCounter.setDays(currentDayNumber, settingsData.numberOfDays);
         }
 
         sun.transform.eulerAngles = (time - 0.25f) * noon * 4.0f;

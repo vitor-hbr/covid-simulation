@@ -140,16 +140,22 @@ public class Population_Controller : MonoBehaviour
             if (randomMaskProb <= maskUsage[0])
             {
                 person.mask = Person.Masks.Cloth;
-                ReportData.maskInfected[0][0]++;
+                if(person.isInfected)
+                    ReportData.maskInfected[0][0]++;
+                ReportData.maskTotal[0]++;
             } else if (randomMaskProb <= maskUsage[1])
             {
                 person.mask = Person.Masks.N95;
-                ReportData.maskInfected[1][0]++;
+                if (person.isInfected)
+                    ReportData.maskInfected[1][0]++;
+                ReportData.maskTotal[1]++;
             }
             else
             {
                 person.mask = Person.Masks.None;
-                ReportData.maskInfected[2][0]++;
+                if (person.isInfected)
+                    ReportData.maskInfected[2][0]++;
+                ReportData.maskTotal[2]++;
             }
 
             float randomVaccineProb = Random.Range(0f, 1f);
@@ -159,28 +165,37 @@ public class Population_Controller : MonoBehaviour
             {
                 person.vaccine = vaccines[0];
                 personOutline.OutlineColor = vacColor[0];
-                ReportData.vaccineInfected[0][0]++;
+                if (person.isInfected)
+                    ReportData.vaccineInfected[0][0]++;
+                ReportData.vaccineTotal[0]++;
             }
             else if (randomVaccineProb <= vacUsage[1])
             {
                 person.vaccine = vaccines[1];
                 personOutline.OutlineColor = vacColor[1];
-                ReportData.vaccineInfected[1][0]++;
+                if (person.isInfected)
+                    ReportData.vaccineInfected[1][0]++;
+                ReportData.vaccineTotal[1]++;
+
             }
             else if(randomVaccineProb <= vacUsage[2])
             {
                 person.vaccine = vaccines[2];
                 personOutline.OutlineColor = vacColor[2];
-                ReportData.vaccineInfected[2][0]++;
+                if (person.isInfected)
+                    ReportData.vaccineInfected[2][0]++;
+                ReportData.vaccineTotal[2]++;
+
             }
             else
             {
                 person.vaccine = vaccines[3];
                 personOutline.OutlineColor = vacColor[3];
-                ReportData.vaccineInfected[3][0]++;
+                if (person.isInfected)
+                    ReportData.vaccineInfected[3][0]++;
+                ReportData.vaccineTotal[3]++;
             }
 
-              
             person.uiCounter = uICounter;
 
             AgentNavigation personNav = personTransform.GetComponent<AgentNavigation>();

@@ -14,6 +14,7 @@ public class ReportUI : MonoBehaviour
     public GameObject finalInfectedObject;
     public GameObject dailyCaseObject;
 
+    public GameObject[] pages = new GameObject[5];
     void Start()
     {
         numberDaysObject.GetComponent<TextMeshProUGUI>().text += (ReportData.numberOfInfectByDay.Count);        
@@ -38,5 +39,19 @@ public class ReportUI : MonoBehaviour
             childText.text += maskProportion;
         }
 
+    }
+
+    public void showReportPage(int index)
+    {
+        for (int i = 0; i < pages.Length; i++)
+        {
+            if(i == index)
+            {
+                pages[i].SetActive(true);
+            } else
+            {
+                pages[i].SetActive(false);
+            }
+        }
     }
 }

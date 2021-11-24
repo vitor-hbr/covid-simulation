@@ -97,7 +97,11 @@ public class UICounter : MonoBehaviour
         iterator = 0;
         foreach (string item in Population_Controller.vacNames)
         {
-            ReportData.vaccineInfected[iterator][dayNightCycle.currentDayNumber]++;
+            if(item == vaccineType.name)
+            {
+                ReportData.vaccineInfected[iterator][dayNightCycle.currentDayNumber]++;
+            }
+            iterator++;
         }
 
         updateUI();

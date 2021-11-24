@@ -10,6 +10,8 @@ public class ReportData : ScriptableObject
     public static int totalInfected;
     public static List<List<int>> maskInfected = generateMaskList();
     public static List<List<int>> vaccineInfected;
+    public static List<int> vaccineTotal = new List<int>{ 0, 0, 0, 0 };
+    public static List<int> maskTotal = new List<int>{0,0,0};
 
     static List<List<int>> generateMaskList()
     {
@@ -32,6 +34,8 @@ public class ReportData : ScriptableObject
 
     public static void newDay()
     {
+        numberOfInfectByDay.Add(0);
+
         foreach (var vacList in vaccineInfected)
         {
             vacList.Add(0);
