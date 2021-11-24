@@ -36,7 +36,7 @@ public class DayNightCycle : MonoBehaviour
 
     private void Start()
     {
-        timeRate = Time.timeScale / fullDayLength ;
+        timeRate = 10 * Time.timeScale / fullDayLength ;
         time = startTime;
         uiCounter = UI.GetComponent<UICounter>();
         ReportData.newDay();
