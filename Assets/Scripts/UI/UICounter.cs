@@ -110,7 +110,7 @@ public class UICounter : MonoBehaviour
     public void setInfection(int infected)
     {
         ReportData.totalInfected = infected;
-        ReportData.numberOfInfectByDay.Add(infected);
+        ReportData.numberOfInfectByDay[0] = infected;
         
         updateUI();
     }

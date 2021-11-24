@@ -5,7 +5,8 @@ using UnityEngine;
 public class FullReport : MonoBehaviour
 {
     public SettingsData settingsData;
-
+    public GameObject Page1Chart;
+    public GameObject Page2Chart;
     public GameObject Page3Charts;
     public GameObject Page4Charts;
 
@@ -20,12 +21,19 @@ public class FullReport : MonoBehaviour
 
     void setDataPage1()
     {
-
+        Page1Chart.GetComponent<LineChart>().ShowGraph(ReportData.numberOfInfectByDay);
     }
 
     void setDataPage2()
     {
-
+        int accumulative = 0;
+        List<int> accumulativeList = new List<int>();
+        foreach (int infectedByDay in ReportData.numberOfInfectByDay)
+        {
+            accumulative += infectedByDay;
+            accumulativeList.Add(accumulative);
+        }
+        Page2Chart.GetComponent<LineChart>().ShowGraph(accumulativeList);
     }
 
     void setDataPage3()

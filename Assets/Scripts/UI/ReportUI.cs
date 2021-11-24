@@ -17,7 +17,7 @@ public class ReportUI : MonoBehaviour
     public GameObject[] pages = new GameObject[5];
     void Start()
     {
-        numberDaysObject.GetComponent<TextMeshProUGUI>().text += (ReportData.numberOfInfectByDay.Count);        
+        numberDaysObject.GetComponent<TextMeshProUGUI>().text += (ReportData.numberOfInfectByDay.Count) - 1;        
         numberAgentsObject.GetComponent<TextMeshProUGUI>().text += settingsData.numberOfAgents;
         initialInfectedObject.GetComponent<TextMeshProUGUI>().text += (settingsData.percentageOfInfected * 100).ToString("N2") + "%";
         finalInfectedObject.GetComponent<TextMeshProUGUI>().text += (((float) ReportData.totalInfected / settingsData.numberOfAgents) * 100).ToString("N2") + "%";
