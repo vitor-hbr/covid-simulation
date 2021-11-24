@@ -89,14 +89,14 @@ public class Person : MonoBehaviour
         }
         var main = particles.main;
         float currentActionFloat = (float)currentAction;
-        main.startSpeed = 0.15f * (currentActionFloat / 2);
+        main.startSpeed = 1.5f * (currentActionFloat / 2);
         var noise = particles.noise;
 
         var emission = particles.emission;
-        if (3f * currentActionFloat * ((float)mask / 100) < 1) {
-            emission.rateOverTime = 1; 
+        if (30f * currentActionFloat * ((float)mask / 100) < 10) {
+            emission.rateOverTime = 10; 
         }
-        emission.rateOverTime = new ParticleSystem.MinMaxCurve(1f * currentActionFloat * ((float) mask / 100), 3f * currentActionFloat * ((float) mask / 100));
+        emission.rateOverTime = new ParticleSystem.MinMaxCurve(10f * currentActionFloat * ((float) mask / 100), 30f * currentActionFloat * ((float) mask / 100));
         particles.Play();
     }
 
