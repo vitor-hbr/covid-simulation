@@ -10,15 +10,17 @@ public class AgentNavigation : MonoBehaviour
     public float[] periodBoundry;
     public DayNightCycle dayNight;
     public Animator animator;
+    private Person person;
 
     private void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+        person = transform.GetComponent<Person>();
     }
 
     private void Update()
     {
-        if (chair && exit)
+        if (chair && exit && person.numOfDaysAway == -1)
         {
             if (dayNight.time > periodBoundry[0] && dayNight.time < periodBoundry[1])
             {
@@ -40,6 +42,8 @@ public class AgentNavigation : MonoBehaviour
                 animator.SetBool("isWalking", true);
                 navMeshAgent.SetDestination(exit.transform.position);
             }
+        } else if(gameObject.activeSelf) {
+            gameObject.SetActive(false);
         }
     }
 

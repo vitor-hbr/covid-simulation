@@ -32,6 +32,8 @@ public class DayNightCycle : MonoBehaviour
     public GameObject UI;
 
     public SettingsData settingsData;
+    public GameObject populationObject;
+    private Population_Controller population_Controller;
     private UICounter uiCounter;
 
     private void Start()
@@ -39,6 +41,7 @@ public class DayNightCycle : MonoBehaviour
         timeRate = 10 * Time.timeScale / fullDayLength ;
         time = startTime;
         uiCounter = UI.GetComponent<UICounter>();
+        population_Controller = populationObject.GetComponent<Population_Controller>();
         ReportData.newDay();
         uiCounter.setDays(currentDayNumber, settingsData.numberOfDays);
     }
@@ -57,6 +60,7 @@ public class DayNightCycle : MonoBehaviour
                 SceneManager.LoadScene("Report", LoadSceneMode.Single);
             } else
             {
+                population_Controller.UpdatePopulationStatus(currentDayNumber-1);
                 ReportData.newDay();
                 uiCounter.setDays(currentDayNumber, settingsData.numberOfDays);
             }

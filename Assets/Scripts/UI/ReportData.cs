@@ -7,7 +7,9 @@ using UnityEngine;
 public class ReportData : ScriptableObject
 {
     public static List<int> numberOfInfectByDay = new List<int>();
+    public static List<int> numberOfDeathsByDay = new List<int>();
     public static int totalInfected;
+    public static int totalDeaths;
     public static List<List<int>> maskInfected = generateMaskList();
     public static List<List<int>> vaccineInfected;
     public static List<int> vaccineTotal = new List<int>{ 0, 0, 0, 0 };
@@ -35,6 +37,7 @@ public class ReportData : ScriptableObject
     public static void newDay()
     {
         numberOfInfectByDay.Add(0);
+        numberOfDeathsByDay.Add(0);
 
         foreach (var vacList in vaccineInfected)
         {
@@ -51,5 +54,10 @@ public class ReportData : ScriptableObject
     {
         int realTotalInfected = totalInfected - numberOfInfectByDay[0];
         return (float) (realTotalInfected / (numberOfInfectByDay.Count));
+    }
+
+    public static float avgDailyDeaths()
+    {
+        return (float) (totalDeaths / numberOfDeathsByDay.Count);
     }
 }

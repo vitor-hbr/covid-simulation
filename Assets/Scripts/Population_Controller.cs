@@ -23,10 +23,11 @@ public class Population_Controller : MonoBehaviour
     [SerializeField]
     public List<Vaccine> vaccines;
     public static string[] vacNames = { "AstraZeneca", "Pfizer", "Coronavac", "None" };
-    private float[] vacEfficacies = { 0.70f, 0.95f, 0.50f, 0.0f};
+    private float[] vacEfficacies = { 0.70f, 0.95f, 0.50f, 0.0f };
     private float[] vacUsage;
     private Color[] vacColor = { new Color(1, 0.9096057f, 0.2688679f), new Color(0.1417534f, 1, 0), new Color(1, 0.5414941f, 0), new Color(1, 0, 0) };
-    
+    private float[] vacAsymptomaticChance = { 0.85f, 0.94f, 0.70f, 0.40f };
+
     public enum periods
     {
         morning,
@@ -45,7 +46,7 @@ public class Population_Controller : MonoBehaviour
         maskUsage = buildAccumulativeArray(settingsData.usageProportion);
         vacUsage = buildAccumulativeArray(settingsData.vaccineProportion);
 
-        vaccines = generateVaccineList(vacNames, vacEfficacies, vacUsage);
+        vaccines = generateVaccineList(vacNames, vacEfficacies, vacUsage, vacAsymptomaticChance);
 
         Transform[] tableChairs = new Transform[classRooms.transform.childCount];
         dayNightCycle = dayNightObject.GetComponent<DayNightCycle>();
@@ -54,11 +55,11 @@ public class Population_Controller : MonoBehaviour
         {
             tableChairs[i] = classRooms.transform.GetChild(i).transform.Find("Tables and Chairs");
         }
-        
+
         int numberOfPairsPerClassRoom = tableChairs[0].childCount;
         List<int> chairIndexesList = new List<int>();
 
-        for(int i = 0; i < numberOfPairsPerClassRoom; i++)
+        for (int i = 0; i < numberOfPairsPerClassRoom; i++)
         {
             chairIndexesList.Add(i);
         }
@@ -69,12 +70,14 @@ public class Population_Controller : MonoBehaviour
         checkActivationPeriod = new UnityEvent();
         checkActivationPeriod.AddListener(activatePersons);
     }
-    
+
     private void Update()
     {
-        foreach (periods p in Periods) {
+        foreach (periods p in Periods)
+        {
             float[] boundry = getPeriodBoundry(p);
-            if (lastTime <= boundry[0] && dayNightCycle.time >= boundry[0]) {
+            if (lastTime <= boundry[0] && dayNightCycle.time >= boundry[0])
+            {
                 checkActivationPeriod.Invoke();
             }
         }
@@ -104,12 +107,12 @@ public class Population_Controller : MonoBehaviour
 
         int infectedNumber = 0;
 
-        foreach(periods period in Periods)
+        foreach (periods period in Periods)
         {
             periodChairIndexesList.Add(new List<int>(chairIndexesList));
         }
 
-        int[] currentClassRoom = {0, 0, 0};
+        int[] currentClassRoom = { 0, 0, 0 };
         for (int i = 0; i < settingsData.numberOfAgents; i++)
         {
             int currentPeriod = i % 3;
@@ -126,6 +129,7 @@ public class Population_Controller : MonoBehaviour
             if (initialInfectionList[infectionIndex] == 1)
             {
                 person.isInfected = true;
+                person.SetStatusValuesOnInfection();
                 infectedNumber++;
                 person.skinnedMeshRenderer.material.color = new Color(1, 0, 0);
             }
@@ -140,10 +144,11 @@ public class Population_Controller : MonoBehaviour
             if (randomMaskProb <= maskUsage[0])
             {
                 person.mask = Person.Masks.Cloth;
-                if(person.isInfected)
+                if (person.isInfected)
                     ReportData.maskInfected[0][0]++;
                 ReportData.maskTotal[0]++;
-            } else if (randomMaskProb <= maskUsage[1])
+            }
+            else if (randomMaskProb <= maskUsage[1])
             {
                 person.mask = Person.Masks.N95;
                 if (person.isInfected)
@@ -178,7 +183,7 @@ public class Population_Controller : MonoBehaviour
                 ReportData.vaccineTotal[1]++;
 
             }
-            else if(randomVaccineProb <= vacUsage[2])
+            else if (randomVaccineProb <= vacUsage[2])
             {
                 person.vaccine = vaccines[2];
                 personOutline.OutlineColor = vacColor[2];
@@ -203,7 +208,7 @@ public class Population_Controller : MonoBehaviour
             personNav.chair = extractedChair.gameObject;
 
             periodChairIndexesList[currentPeriod].RemoveAt(randomIndex);
-            personNav.periodBoundry = getPeriodBoundry((periods) currentPeriod);
+            personNav.periodBoundry = getPeriodBoundry((periods)currentPeriod);
             personNav.dayNight = dayNightCycle;
             personNav.exit = exit;
 
@@ -245,24 +250,25 @@ public class Population_Controller : MonoBehaviour
         return boundries;
     }
 
-    public void activatePersons(){
-        foreach(Transform person in transform)
+    public void activatePersons()
+    {
+        foreach (Transform person in transform)
         {
             AgentNavigation navAgent = person.gameObject.GetComponent<AgentNavigation>();
             GameObject actualPerson = person.gameObject;
-            if(!(actualPerson.activeSelf) && navAgent.periodBoundry[0] <= dayNightCycle.time && navAgent.periodBoundry[1] >= dayNightCycle.time)
+            if (!(actualPerson.activeSelf) && navAgent.periodBoundry[0] <= dayNightCycle.time && navAgent.periodBoundry[1] >= dayNightCycle.time)
             {
                 actualPerson.SetActive(true);
             }
         }
     }
 
-    public List<Vaccine> generateVaccineList(string[] names, float[] efficacies, float[] distributions)
+    public List<Vaccine> generateVaccineList(string[] names, float[] efficacies, float[] distributions, float[] asymptomaticChance)
     {
         List<Vaccine> l = new List<Vaccine>();
         for (int i = 0; i < names.Length; i++)
         {
-            l.Add(new Vaccine(names[i], efficacies[i], distributions[i]));
+            l.Add(new Vaccine(names[i], efficacies[i], distributions[i], asymptomaticChance[i]));
         }
         return l;
     }
@@ -290,4 +296,11 @@ public class Population_Controller : MonoBehaviour
         return infectedArray;
     }
 
+    public void UpdatePopulationStatus(int dayNumber)
+    {
+        foreach (Transform person in transform)
+        {
+            person.GetComponent<Person>().UpdateStatus(dayNumber);
+        }
+    }
 }

@@ -126,7 +126,7 @@ public class UICounter : MonoBehaviour
 
     private void updateUI()
     {
-        infected.SetText("infected: <color=red>" + ReportData.totalInfected + "</color>/<color=white>" + settingsData.numberOfAgents + "</color>");
+        infected.SetText("deaths: <color=red>" + ReportData.totalDeaths + "</color> <color=white> | infected:</color> <color=red>" + ReportData.totalInfected + "</color>/<color=white>" + settingsData.numberOfAgents + "</color>");
     }
 
 }
