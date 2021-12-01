@@ -131,6 +131,10 @@ public class Population_Controller : MonoBehaviour
                 person.isInfected = true;
                 person.SetStatusValuesOnInfection();
                 infectedNumber++;
+                for(int daysBefore = 0; daysBefore < (int)Mathf.Round(Random.Range(1f, 7f)); daysBefore++)
+                {
+                    person.UpdateStatus(daysBefore, false);
+                }
                 person.skinnedMeshRenderer.material.color = new Color(1, 0, 0);
             }
             else
@@ -300,7 +304,7 @@ public class Population_Controller : MonoBehaviour
     {
         foreach (Transform person in transform)
         {
-            person.GetComponent<Person>().UpdateStatus(dayNumber);
+            person.GetComponent<Person>().UpdateStatus(dayNumber, true);
         }
     }
 }

@@ -20,7 +20,7 @@ public class AgentNavigation : MonoBehaviour
 
     private void Update()
     {
-        if (chair && exit && person.numOfDaysAway == -1)
+        if (chair && exit && (person.numOfDaysAway == -1 || person.numOfDaysToDetect > -1))
         {
             if (dayNight.time > periodBoundry[0] && dayNight.time < periodBoundry[1])
             {

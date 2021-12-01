@@ -39,7 +39,7 @@ public class Person : MonoBehaviour
     private bool isAsymptomatic = false;
     private int numOfDaysOfLife = -1;
     public int numOfDaysAway = -1;
-    private int numOfDaysToDetect = -1;
+    public int numOfDaysToDetect = -1;
     private int numOfDaysAsymptomatic = -1;
 
     void Start()
@@ -114,15 +114,13 @@ public class Person : MonoBehaviour
             skinnedMeshRenderer.material.color = new Color(0.4535f, 0, 0.6320f);
             isAsymptomatic = true;
             onlyOneAction = (int) Actions.Breathing;
-            //numOfDaysAsymptomatic = 14;
-            numOfDaysAsymptomatic = 1;
+            numOfDaysAsymptomatic = 14;
         }
         else
         {
             skinnedMeshRenderer.material.color = new Color(1, 0, 0);
 
-            //numOfDaysToDetect = (int) Mathf.Round(Random.Range(1f, 3f));
-            numOfDaysToDetect = 1;
+            numOfDaysToDetect = (int) Mathf.Round(Random.Range(1f, 3f));
 
             if (vaccine.name != "None")
             {
@@ -168,7 +166,7 @@ public class Person : MonoBehaviour
         }
     }
 
-    public void UpdateStatus(int numDay)
+    public void UpdateStatus(int numDay, bool report)
     {
         if(isInfected)
         {
@@ -199,7 +197,7 @@ public class Person : MonoBehaviour
                 if(numOfDaysOfLife > -1)
                 {
                     numOfDaysOfLife--;
-                    if (numOfDaysOfLife == -1) {
+                    if (numOfDaysOfLife == -1 && report) {
                         ReportData.numberOfDeathsByDay[numDay]++;
                         ReportData.totalDeaths++;
                         Destroy(gameObject);

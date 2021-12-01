@@ -3784,7 +3784,7 @@ ParticleSystem:
     collidesWith:
       serializedVersion: 2
       m_Bits: 4294967295
-    maxCollisionShapes: 256
+    maxCollisionShapes: 3000
     quality: 0
     voxelSize: 0.5
     collisionMessages: 1
@@ -5047,8 +5047,11 @@ MonoBehaviour:
     name: 
     efficacy: 0
     popDistribution: 0
+    asymptomaticChance: 0
   mask: 100
   skinnedMeshRenderer: {fileID: 0}
+  numOfDaysAway: -1
+  numOfDaysToDetect: -1
 --- !u!1 &4512387250797587213
 GameObject:
   m_ObjectHideFlags: 0
