@@ -11,7 +11,7 @@ public class DayNightCycle : MonoBehaviour
     public float lastTime;
     public float time;
     private float fullDayLength = 86400;
-    public float startTime = 0.34f;
+    public float startTime = 0.98f;
     private float timeRate;
     public int currentDayNumber = 1;
     public Vector3 noon;

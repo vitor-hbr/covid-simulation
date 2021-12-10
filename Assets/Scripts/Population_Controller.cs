@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -231,6 +230,7 @@ public class Population_Controller : MonoBehaviour
             }
         }
         uICounter.setInfection(infectedNumber);
+        Debug.Log(transform.childCount);
     }
 
     public float[] getPeriodBoundry(periods period)

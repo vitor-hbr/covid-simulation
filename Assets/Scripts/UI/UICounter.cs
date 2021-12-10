@@ -77,6 +77,9 @@ public class UICounter : MonoBehaviour
                 Time.timeScale = prevTimeScale;
                 state.text = "state: playing";
             }
+        } else if (Input.GetKeyDown(KeyCode.K))
+        {
+            dayNightCycle.time = 0.99f;
         }
     }
 
@@ -84,17 +87,14 @@ public class UICounter : MonoBehaviour
     {
         ReportData.numberOfInfectByDay[dayNightCycle.currentDayNumber] += 1;
         ReportData.totalInfected += 1;
-        int iterator = 0;
-        foreach (Person.Masks mask in Enum.GetValues(typeof(Person.Masks)))
-        {
-            if(maskType == mask)
-            {
-                ReportData.maskInfected[iterator][dayNightCycle.currentDayNumber]++;
-            }
-            iterator++;
-        }
+            if(maskType == Person.Masks.Cloth)
+                ReportData.maskInfected[0][dayNightCycle.currentDayNumber]++;
+             else  if(maskType == Person.Masks.N95)
+                ReportData.maskInfected[1][dayNightCycle.currentDayNumber]++;
+             else
+                ReportData.maskInfected[2][dayNightCycle.currentDayNumber]++;
 
-        iterator = 0;
+        int iterator = 0;
         foreach (string item in Population_Controller.vacNames)
         {
             if(item == vaccineType.name)

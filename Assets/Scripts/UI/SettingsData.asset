@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: SettingsData
   m_EditorClassIdentifier: 
   numberOfDays: 5
-  numberOfAgents: 1500
+  numberOfAgents: 6630
   vaccineProportion:
   - 0.3
   - 0.44
   - 0.25
   - 0.01
   usageProportion:
-  - 0.1
-  - 0.8
-  - 0.1
+  - 0.94
+  - 0.03
+  - 0.03
   percentageOfInfected: 0.1

@@ -21,8 +21,8 @@ public class Person : MonoBehaviour
 
     public bool isInfected = false;
 
-    public float infectionProbability = 0.129f;
-    public int collisionThreshold = 280;
+    public float infectionProbability = 0.2057f;
+    public int collisionThreshold;
     public int collisionCounter = 0;
     public List<ParticleCollisionEvent> collisionEvents;
     public UICounter uiCounter;
@@ -46,6 +46,7 @@ public class Person : MonoBehaviour
     {
         particles = transform.GetChild(0).gameObject.GetComponent<ParticleSystem>();
         collisionEvents = new List<ParticleCollisionEvent>();
+        collisionThreshold = (int) (30 * (2 - ((float) mask / 100)));
     }
 
     void Update()
@@ -58,7 +59,7 @@ public class Person : MonoBehaviour
             timeThreshold += Time.deltaTime;
         } else
         {
-            if(collisionCounter > collisionThreshold)
+            if (collisionCounter > collisionThreshold)
             {
                 float infect = Random.Range(0f, 1f);
                 if (infect <= infectionProbability * (1 - vaccine.efficacy))
@@ -197,8 +198,9 @@ public class Person : MonoBehaviour
                 if(numOfDaysOfLife > -1)
                 {
                     numOfDaysOfLife--;
-                    if (numOfDaysOfLife == -1 && report) {
-                        ReportData.numberOfDeathsByDay[numDay]++;
+                    if (numOfDaysOfLife == -1) {
+                        if (report)
+                            ReportData.numberOfDeathsByDay[numDay]++;
                         ReportData.totalDeaths++;
                         Destroy(gameObject);
                     }

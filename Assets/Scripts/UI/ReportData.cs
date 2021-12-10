@@ -53,7 +53,7 @@ public class ReportData : ScriptableObject
     public static float avgDailyCases()
     {
         int realTotalInfected = totalInfected - numberOfInfectByDay[0];
-        return (float) (realTotalInfected / (numberOfInfectByDay.Count));
+        return (float) (realTotalInfected / (numberOfInfectByDay.Count - 1));
     }
 
     public static float avgDailyDeaths()

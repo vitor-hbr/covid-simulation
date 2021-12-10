@@ -8,9 +8,12 @@ public class FullReport : MonoBehaviour
     public GameObject Page1Chart;
     public GameObject Page2Chart;
     public GameObject Page3Charts;
+    public GameObject Page3LegendNI;
+    public GameObject Page3LegendI;
     public GameObject Page4Charts;
-
-
+    public GameObject Page4LegendNI;
+    public GameObject Page4LegendI;
+    public 
     void Start()
     {
         setDataPage1();
@@ -38,15 +41,15 @@ public class FullReport : MonoBehaviour
 
     void setDataPage3()
     {
-        setPieChartData(Page3Charts, ReportData.vaccineInfected, ReportData.vaccineTotal);
+        setPieChartData(Page3Charts, ReportData.vaccineInfected, ReportData.vaccineTotal, Page3LegendNI, Page3LegendI);
     }
 
     void setDataPage4()
     {
-        setPieChartData(Page4Charts, ReportData.maskInfected, ReportData.maskTotal);
+        setPieChartData(Page4Charts, ReportData.maskInfected, ReportData.maskTotal, Page4LegendNI, Page4LegendI);
     }
 
-    void setPieChartData(GameObject PageCharts, List<List<int>> listInfectionReportData, List<int> totalReportData)
+    void setPieChartData(GameObject PageCharts, List<List<int>> listInfectionReportData, List<int> totalReportData, GameObject legendObject0, GameObject legendObject1)
     {
         for (int i = 0; i < PageCharts.transform.childCount; i++)
         {
@@ -81,8 +84,8 @@ public class FullReport : MonoBehaviour
                 calculateNonInfectedOfUsers(finalValues, totalReportData);
             }
 
-            initialChart.UpdateChart(initialValues);
-            finalChart.UpdateChart(finalValues);
+            initialChart.UpdateChart(initialValues, legendObject0, legendObject1, false, i);
+            finalChart.UpdateChart(finalValues, legendObject0, legendObject1, true, i);
         }
     }
 

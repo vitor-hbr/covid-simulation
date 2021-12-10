@@ -418,7 +418,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4852147441700631465, guid: 7a3f78d6af74b8946ae59592d69bbf2d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.21
+      value: -6.594
       objectReference: {fileID: 0}
     - target: {fileID: 4852147441700631465, guid: 7a3f78d6af74b8946ae59592d69bbf2d, type: 3}
       propertyPath: m_LocalRotation.w
@@ -548,9 +548,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7834174489598797894}
     m_Modifications:
+    - target: {fileID: 2811548626169179145, guid: ad883029f9780a64989a885cc0de7e33, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4902699057834096925, guid: ad883029f9780a64989a885cc0de7e33, type: 3}
       propertyPath: m_Name
       value: doorwall
+      objectReference: {fileID: 0}
+    - target: {fileID: 4902699057834096925, guid: ad883029f9780a64989a885cc0de7e33, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4902699057834096925, guid: ad883029f9780a64989a885cc0de7e33, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5711182793609290663, guid: ad883029f9780a64989a885cc0de7e33, type: 3}
       propertyPath: m_RootOrder
@@ -675,6 +687,14 @@ PrefabInstance:
     - target: {fileID: 4902699057834096925, guid: ad883029f9780a64989a885cc0de7e33, type: 3}
       propertyPath: m_Name
       value: doorwall (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4902699057834096925, guid: ad883029f9780a64989a885cc0de7e33, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4902699057834096925, guid: ad883029f9780a64989a885cc0de7e33, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5711182793609290663, guid: ad883029f9780a64989a885cc0de7e33, type: 3}
       propertyPath: m_RootOrder

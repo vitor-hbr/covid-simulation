@@ -39,6 +39,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4852147441700631465}
     m_Modifications:
+    - target: {fileID: 7162353082423777683, guid: efc007d4f65558348a6d4b8245ef264e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.00107
+      objectReference: {fileID: 0}
     - target: {fileID: 8311824568052336079, guid: efc007d4f65558348a6d4b8245ef264e, type: 3}
       propertyPath: m_Name
       value: professorchair
@@ -65,11 +69,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8652075435195080565, guid: efc007d4f65558348a6d4b8245ef264e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.109
       objectReference: {fileID: 0}
     - target: {fileID: 8652075435195080565, guid: efc007d4f65558348a6d4b8245ef264e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.41299963
+      value: 0.413
       objectReference: {fileID: 0}
     - target: {fileID: 8652075435195080565, guid: efc007d4f65558348a6d4b8245ef264e, type: 3}
       propertyPath: m_LocalRotation.w

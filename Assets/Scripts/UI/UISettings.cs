@@ -109,9 +109,9 @@ public class UISettings : MonoBehaviour
     public void Reset()
     {
         settingsData.numberOfDays = 5;
-        settingsData.numberOfAgents = 1500;
+        settingsData.numberOfAgents = 6630;
         settingsData.vaccineProportion = new float[] { 0.30f, 0.44f, 0.25f, 0.01f };
-        settingsData.usageProportion = new float[] { 0.10f, 0.80f, 0.10f };
+        settingsData.usageProportion = new float[] { 0.94f, 0.03f, 0.03f };
         settingsData.percentageOfInfected = 0.10f;
 
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,7 @@ public class PieChart : MonoBehaviour
     public Color[] colors;
     public GameObject valuesObject;
 
-    public void UpdateChart(int[] newValues)
+    public void UpdateChart(int[] newValues, GameObject legendObject0, GameObject legendObject1, bool final, int legend)
     {
         imagesPieChart = new Image[valuesObject.transform.childCount];
         for (int i = 0; i < valuesObject.transform.childCount; i++)
@@ -24,6 +25,15 @@ public class PieChart : MonoBehaviour
         for (int i = 0; i < imagesPieChart.Length; i++)
         {
             totalValues += FindPercentage(newValues, i);
+            if(legend == 0) {
+            legendObject0.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text += (((100 * FindPercentage(newValues, i))).ToString("N2"));
+            if (!final)
+                legendObject0.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text += "-";
+            } else {
+                legendObject1.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text += (((100 * FindPercentage(newValues, i))).ToString("N2"));
+            if (!final)
+                legendObject1.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text += "-";
+            }
             imagesPieChart[imagesPieChart.Length - 1 - i].fillAmount = totalValues;
         }
     }
